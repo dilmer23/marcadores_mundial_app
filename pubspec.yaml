@@ -1,0 +1,37 @@
+name: marcadores_mundial_app
+description: "FIFA World Cup 2026 - Live Scores, Standings & Teams"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  provider: ^6.1.2
+  http: ^1.2.1
+  shimmer: ^3.0.0
+  cached_network_image: ^3.3.1
+  package_info_plus: ^8.0.0
+  url_launcher: ^6.2.6
+  flutter_bloc: ^8.1.5
+  equatable: ^2.0.5
+  video_player: ^2.9.2
+  chewie: ^1.8.4
+  sqflite: ^2.4.1
+  path: ^1.9.0
+  intl: ^0.19.0
+  share_plus: ^10.1.4
+  flutter_local_notifications: ^18.0.1
+  webview_flutter: ^4.10.0
+  webview_flutter_web: ^0.2.3+4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
