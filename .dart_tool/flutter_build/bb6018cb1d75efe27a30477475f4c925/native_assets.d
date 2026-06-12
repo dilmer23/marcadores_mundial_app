@@ -1,0 +1,1 @@
+ C:\\Users\\Jorge\\Downloads\\marcadores_mundial_app\\.dart_tool\\flutter_build\\bb6018cb1d75efe27a30477475f4c925\\native_assets.yaml: 

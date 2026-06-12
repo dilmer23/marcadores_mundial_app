@@ -1,0 +1,224 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.marcadores_mundial_app"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="34" />
+10    <!--
+11         The INTERNET permission is required for development. Specifically,
+12         the Flutter tool needs it to communicate with the running application
+13         to allow setting breakpoints, to provide hot reload, etc.
+14    -->
+15    <uses-permission android:name="android.permission.INTERNET" />
+15-->C:\Users\Jorge\Downloads\marcadores_mundial_app\android\app\src\main\AndroidManifest.xml:2:5-66
+15-->C:\Users\Jorge\Downloads\marcadores_mundial_app\android\app\src\main\AndroidManifest.xml:2:22-64
+16    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+16-->C:\Users\Jorge\Downloads\marcadores_mundial_app\android\app\src\main\AndroidManifest.xml:3:5-78
+16-->C:\Users\Jorge\Downloads\marcadores_mundial_app\android\app\src\main\AndroidManifest.xml:3:22-76
+17    <!--
+18 Required to query activities that can process text, see:
+19         https://developer.android.com/training/package-visibility and
+20         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+21
+22         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+23    -->
+24    <queries>
+24-->C:\Users\Jorge\Downloads\marcadores_mundial_app\android\app\src\main\AndroidManifest.xml:42:5-47:15
+25        <intent>
+25-->C:\Users\Jorge\Downloads\marcadores_mundial_app\android\app\src\main\AndroidManifest.xml:43:9-46:18
+26            <action android:name="android.intent.action.PROCESS_TEXT" />
+26-->C:\Users\Jorge\Downloads\marcadores_mundial_app\android\app\src\main\AndroidManifest.xml:44:13-72
+26-->C:\Users\Jorge\Downloads\marcadores_mundial_app\android\app\src\main\AndroidManifest.xml:44:21-70
+27
+28            <data android:mimeType="text/plain" />
+28-->C:\Users\Jorge\Downloads\marcadores_mundial_app\android\app\src\main\AndroidManifest.xml:45:13-50
+28-->C:\Users\Jorge\Downloads\marcadores_mundial_app\android\app\src\main\AndroidManifest.xml:45:19-48
+29        </intent>
+30    </queries>
+31
+32    <uses-permission android:name="android.permission.VIBRATE" />
+32-->[:flutter_local_notifications] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-66
+32-->[:flutter_local_notifications] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:7:22-63
+33    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+33-->[:flutter_local_notifications] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-77
+33-->[:flutter_local_notifications] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:8:22-74
+34
+35    <permission
+35-->[androidx.core:core:1.13.1] C:\Users\Jorge\.gradle\caches\transforms-3\1460eee2fe1bdf5187d331886d807c44\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+36        android:name="com.example.marcadores_mundial_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+36-->[androidx.core:core:1.13.1] C:\Users\Jorge\.gradle\caches\transforms-3\1460eee2fe1bdf5187d331886d807c44\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+37        android:protectionLevel="signature" />
+37-->[androidx.core:core:1.13.1] C:\Users\Jorge\.gradle\caches\transforms-3\1460eee2fe1bdf5187d331886d807c44\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+38
+39    <uses-permission android:name="com.example.marcadores_mundial_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+39-->[androidx.core:core:1.13.1] C:\Users\Jorge\.gradle\caches\transforms-3\1460eee2fe1bdf5187d331886d807c44\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+39-->[androidx.core:core:1.13.1] C:\Users\Jorge\.gradle\caches\transforms-3\1460eee2fe1bdf5187d331886d807c44\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+40
+41    <application
+42        android:name="android.app.Application"
+43        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+43-->[androidx.core:core:1.13.1] C:\Users\Jorge\.gradle\caches\transforms-3\1460eee2fe1bdf5187d331886d807c44\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+44        android:debuggable="true"
+45        android:extractNativeLibs="true"
+46        android:icon="@mipmap/ic_launcher"
+47        android:label="marcadores_mundial_app"
+48        android:usesCleartextTraffic="true" >
+49        <activity
+50            android:name="com.example.marcadores_mundial_app.MainActivity"
+51            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+52            android:exported="true"
+53            android:hardwareAccelerated="true"
+54            android:launchMode="singleTop"
+55            android:taskAffinity=""
+56            android:theme="@style/LaunchTheme"
+57            android:windowSoftInputMode="adjustResize" >
+58
+59            <!--
+60                 Specifies an Android theme to apply to this Activity as soon as
+61                 the Android process has started. This theme is visible to the user
+62                 while the Flutter UI initializes. After that, this theme continues
+63                 to determine the Window background behind the Flutter UI.
+64            -->
+65            <meta-data
+66                android:name="io.flutter.embedding.android.NormalTheme"
+67                android:resource="@style/NormalTheme" />
+68
+69            <intent-filter>
+70                <action android:name="android.intent.action.MAIN" />
+71
+72                <category android:name="android.intent.category.LAUNCHER" />
+73            </intent-filter>
+74        </activity>
+75        <!--
+76             Don't delete the meta-data below.
+77             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+78        -->
+79        <meta-data
+80            android:name="flutterEmbedding"
+81            android:value="2" />
+82        <!--
+83           Declares a provider which allows us to store files to share in
+84           '.../caches/share_plus' and grant the receiving action access
+85        -->
+86        <provider
+86-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:13:9-21:20
+87            android:name="dev.fluttercommunity.plus.share.ShareFileProvider"
+87-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-77
+88            android:authorities="com.example.marcadores_mundial_app.flutter.share_provider"
+88-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:15:13-74
+89            android:exported="false"
+89-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-37
+90            android:grantUriPermissions="true" >
+90-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:17:13-47
+91            <meta-data
+91-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-20:68
+92                android:name="android.support.FILE_PROVIDER_PATHS"
+92-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:19:17-67
+93                android:resource="@xml/flutter_share_file_paths" />
+93-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:20:17-65
+94        </provider>
+95        <!--
+96           This manifest declared broadcast receiver allows us to use an explicit
+97           Intent when creating a PendingItent to be informed of the user's choice
+98        -->
+99        <receiver
+99-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:26:9-32:20
+100            android:name="dev.fluttercommunity.plus.share.SharePlusPendingIntent"
+100-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-82
+101            android:exported="false" >
+101-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:28:13-37
+102            <intent-filter>
+102-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:29:13-31:29
+103                <action android:name="EXTRA_CHOSEN_COMPONENT" />
+103-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:30:17-65
+103-->[:share_plus] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\share_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:30:25-62
+104            </intent-filter>
+105        </receiver>
+106
+107        <activity
+107-->[:url_launcher_android] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-11:74
+108            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+108-->[:url_launcher_android] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:9:13-74
+109            android:exported="false"
+109-->[:url_launcher_android] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:10:13-37
+110            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+110-->[:url_launcher_android] C:\Users\Jorge\Downloads\marcadores_mundial_app\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-71
+111
+112        <uses-library
+112-->[androidx.window:window:1.2.0] C:\Users\Jorge\.gradle\caches\transforms-3\eddb18af5c2fa0b2f343504f414b2bcc\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
+113            android:name="androidx.window.extensions"
+113-->[androidx.window:window:1.2.0] C:\Users\Jorge\.gradle\caches\transforms-3\eddb18af5c2fa0b2f343504f414b2bcc\transformed\jetified-window-1.2.0\AndroidManifest.xml:24:13-54
+114            android:required="false" />
+114-->[androidx.window:window:1.2.0] C:\Users\Jorge\.gradle\caches\transforms-3\eddb18af5c2fa0b2f343504f414b2bcc\transformed\jetified-window-1.2.0\AndroidManifest.xml:25:13-37
+115        <uses-library
+115-->[androidx.window:window:1.2.0] C:\Users\Jorge\.gradle\caches\transforms-3\eddb18af5c2fa0b2f343504f414b2bcc\transformed\jetified-window-1.2.0\AndroidManifest.xml:26:9-28:40
+116            android:name="androidx.window.sidecar"
+116-->[androidx.window:window:1.2.0] C:\Users\Jorge\.gradle\caches\transforms-3\eddb18af5c2fa0b2f343504f414b2bcc\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
+117            android:required="false" />
+117-->[androidx.window:window:1.2.0] C:\Users\Jorge\.gradle\caches\transforms-3\eddb18af5c2fa0b2f343504f414b2bcc\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
+118
+119        <provider
+119-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Jorge\.gradle\caches\transforms-3\fd0fa198cd42796c4882482b62ba19b0\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:24:9-32:20
+120            android:name="androidx.startup.InitializationProvider"
+120-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Jorge\.gradle\caches\transforms-3\fd0fa198cd42796c4882482b62ba19b0\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:25:13-67
+121            android:authorities="com.example.marcadores_mundial_app.androidx-startup"
+121-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Jorge\.gradle\caches\transforms-3\fd0fa198cd42796c4882482b62ba19b0\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:26:13-68
+122            android:exported="false" >
+122-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Jorge\.gradle\caches\transforms-3\fd0fa198cd42796c4882482b62ba19b0\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:27:13-37
+123            <meta-data
+123-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Jorge\.gradle\caches\transforms-3\fd0fa198cd42796c4882482b62ba19b0\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+124                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+124-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Jorge\.gradle\caches\transforms-3\fd0fa198cd42796c4882482b62ba19b0\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+125                android:value="androidx.startup" />
+125-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Jorge\.gradle\caches\transforms-3\fd0fa198cd42796c4882482b62ba19b0\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+126            <meta-data
+126-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+127                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+127-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+128                android:value="androidx.startup" />
+128-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+129        </provider>
+130
+131        <receiver
+131-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+132            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+132-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+133            android:directBootAware="false"
+133-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+134            android:enabled="true"
+134-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+135            android:exported="true"
+135-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+136            android:permission="android.permission.DUMP" >
+136-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+137            <intent-filter>
+137-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+138                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+138-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+138-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+139            </intent-filter>
+140            <intent-filter>
+140-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+141                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+141-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+141-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+142            </intent-filter>
+143            <intent-filter>
+143-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+144                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+144-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+144-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+145            </intent-filter>
+146            <intent-filter>
+146-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+147                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+147-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+147-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Jorge\.gradle\caches\transforms-3\813466969e9c71d10ab6014b56e92e53\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+148            </intent-filter>
+149        </receiver>
+150    </application>
+151
+152</manifest>
