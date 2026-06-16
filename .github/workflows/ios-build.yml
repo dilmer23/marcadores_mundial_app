@@ -304,8 +304,16 @@ jobs:
             cd build
             zip -rq "$BUILD_ID.ipa" Payload
             rm -rf Payload
+            
+            # Copiar IPA a una carpeta fija para upload
+            mkdir -p "$GITHUB_WORKSPACE/artifacts"
+            cp "$BUILD_ID.ipa" "$GITHUB_WORKSPACE/artifacts/"
+            
             echo "Created unsigned IPA: build/$BUILD_ID.ipa"
-          fi
+            
+            echo "Artifacts:"
+            ls -lah "$GITHUB_WORKSPACE/artifacts"
+                      fi
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
