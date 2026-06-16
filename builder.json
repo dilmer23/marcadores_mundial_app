@@ -1,0 +1,15 @@
+{
+  "project": "marcadores_mundial_app",
+  "platform": "ios",
+  "github": {
+    "owner": "dilmer23",
+    "repo": "marcadores_mundial_app"
+  },
+  "ios": {},
+  "flutter": {
+    "version": "3.24.0",
+    "watch": {}
+  },
+  "reactNative": {},
+  "mobai": {}
+}
