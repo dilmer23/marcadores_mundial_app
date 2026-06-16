@@ -1,11 +1,11 @@
 {
-    "name": "marcadores_mundial_app",
-    "short_name": "marcadores_mundial_app",
+    "name": "World Cup 2026",
+    "short_name": "WC2026",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "FIFA World Cup 2026 - Live Scores, Standings & Teams",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

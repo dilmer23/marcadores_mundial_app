@@ -3,8 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:marcadores_mundial_app/domain/entities/iptv_channel.dart';
 import 'package:marcadores_mundial_app/data/utils/m3u_parser.dart';
 
-const kDefaultIptvUrl =
-    'https://videopro.juanjuistream.uk:1981/tve/index.fmp4.m3u8';
+const kDefaultIptvUrl ='';
 
 const kPinnedChannel = IptvChannel(
   name: 'DSPORT',

@@ -32,8 +32,8 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(
-        length: 4, vsync: this, initialIndex: widget.initialTab);
+    _tabController =
+        TabController(length: 4, vsync: this, initialIndex: widget.initialTab);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<WorldCupCubit>().loadAllData();
     });
@@ -64,8 +64,8 @@ class _HomePageState extends State<HomePage>
               unselectedLabelColor: AppColors.textMuted,
               indicatorColor: AppColors.secondary,
               indicatorWeight: 3,
-              labelStyle: const TextStyle(
-                  fontWeight: FontWeight.w700, fontSize: 13),
+              labelStyle:
+                  const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
               tabs: [
                 Tab(text: context.tr('Matches', 'Partidos')),
                 Tab(text: context.tr('Teams', 'Equipos')),
@@ -156,12 +156,12 @@ class _HomePageState extends State<HomePage>
         filtered = filtered.where((g) => g.finished).toList();
         break;
       case MatchFilter.upcoming:
-        filtered =
-            filtered.where((g) => !g.finished && g.timeElapsed == 'notstarted').toList();
+        filtered = filtered
+            .where((g) => !g.finished && g.timeElapsed == 'notstarted')
+            .toList();
         break;
       case MatchFilter.live:
-        filtered =
-            filtered.where((g) => g.timeElapsed == 'live').toList();
+        filtered = filtered.where((g) => g.timeElapsed == 'live').toList();
         break;
       case MatchFilter.all:
         break;
@@ -187,8 +187,8 @@ class _HomePageState extends State<HomePage>
             controller: _searchController,
             onChanged: (v) => setState(() => _searchQuery = v),
             decoration: InputDecoration(
-              hintText: context.tr('Search by team name...',
-                  'Buscar por nombre de equipo...'),
+              hintText: context.tr(
+                  'Search by team name...', 'Buscar por nombre de equipo...'),
               prefixIcon: const Icon(Icons.search_rounded, size: 22),
               suffixIcon: _searchQuery.isNotEmpty
                   ? IconButton(
@@ -247,9 +247,10 @@ class _HomePageState extends State<HomePage>
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             children: [
-              Text(context.tr(
-                  '${filtered.length} match${filtered.length == 1 ? '' : 'es'}',
-                  '${filtered.length} partido${filtered.length == 1 ? '' : 's'}'),
+              Text(
+                context.tr(
+                    '${filtered.length} match${filtered.length == 1 ? '' : 'es'}',
+                    '${filtered.length} partido${filtered.length == 1 ? '' : 's'}'),
                 style: const TextStyle(
                   fontSize: 12,
                   color: AppColors.textMuted,
@@ -271,8 +272,8 @@ class _HomePageState extends State<HomePage>
           child: filtered.isEmpty
               ? EmptyState(
                   icon: Icons.search_off_rounded,
-                  title: context.tr('No matches found',
-                      'No se encontraron partidos'),
+                  title: context.tr(
+                      'No matches found', 'No se encontraron partidos'),
                   subtitle: context.tr('Try a different filter or search term',
                       'Prueba otro filtro o término de búsqueda'))
               : RefreshIndicator(
@@ -310,9 +311,8 @@ class _HomePageState extends State<HomePage>
     // Group by unique date (first 10 chars of localDate = MM/DD/YYYY)
     final grouped = <String, List<Game>>{};
     for (final g in games) {
-      final dateKey = g.localDate.length >= 10
-          ? g.localDate.substring(0, 10)
-          : g.localDate;
+      final dateKey =
+          g.localDate.length >= 10 ? g.localDate.substring(0, 10) : g.localDate;
       grouped.putIfAbsent(dateKey, () => []);
       grouped[dateKey]!.add(g);
     }
@@ -323,7 +323,6 @@ class _HomePageState extends State<HomePage>
     for (final date in sortedDates) {
       final dayGames = grouped[date]!;
 
-
       widgets.add(Padding(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 4),
         child: Row(
@@ -333,7 +332,7 @@ class _HomePageState extends State<HomePage>
             const SizedBox(width: 8),
             Flexible(
               child: Text(
-                _formatDate(date),
+                date,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 15,
@@ -371,34 +370,6 @@ class _HomePageState extends State<HomePage>
     }
 
     return widgets;
-  }
-
-  String _formatDate(String date) {
-    // Format: "06/11/2026" -> "Thu, Jun 11"
-    try {
-      final parts = date.split('/');
-      if (parts.length >= 3) {
-        final month = int.tryParse(parts[0]) ?? 0;
-        final day = int.tryParse(parts[1]) ?? 0;
-        final year = int.tryParse(parts[2]) ?? 2026;
-
-        final months = context.lng == 'es'
-            ? ['', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-                'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
-            : ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        final days = context.lng == 'es'
-            ? ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
-            : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-        // Rough weekday calc (Zeller-like simplification)
-        final dt = DateTime(year, month, day);
-        final weekday = days[dt.weekday % 7];
-
-        return '$weekday, $months[month] $day';
-      }
-    } catch (_) {}
-    return date;
   }
 
   // ========== TEAMS TAB ==========
@@ -447,8 +418,8 @@ class _HomePageState extends State<HomePage>
     if (standings.isEmpty) {
       return EmptyState(
         icon: Icons.table_chart_rounded,
-        title: context.tr('No standings available',
-            'No hay clasificaciones disponibles'),
+        title: context.tr(
+            'No standings available', 'No hay clasificaciones disponibles'),
       );
     }
 
