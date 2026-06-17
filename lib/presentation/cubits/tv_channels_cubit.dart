@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:marcadores_mundial_app/data/models/channel_model.dart';
-import 'package:marcadores_mundial_app/data/services/supabase_service.dart';
+import 'package:marcadores_mundial_app/domain/entities/channel.dart';
+import 'package:marcadores_mundial_app/domain/usecases/fetch_active_channels.dart';
 
 class TvChannelsState {
   final bool isLoading;
-  final List<ChannelModel> channels;
+  final List<Channel> channels;
   final String? error;
 
   const TvChannelsState({
@@ -15,7 +15,7 @@ class TvChannelsState {
 
   TvChannelsState copyWith({
     bool? isLoading,
-    List<ChannelModel>? channels,
+    List<Channel>? channels,
     String? error,
   }) {
     return TvChannelsState(
@@ -27,14 +27,14 @@ class TvChannelsState {
 }
 
 class TvChannelsCubit extends Cubit<TvChannelsState> {
-  final SupabaseService _service;
+  final FetchActiveChannels _fetchActiveChannels;
 
-  TvChannelsCubit(this._service) : super(const TvChannelsState());
+  TvChannelsCubit(this._fetchActiveChannels) : super(const TvChannelsState());
 
   void loadChannels() async {
     emit(state.copyWith(isLoading: true, error: null));
     try {
-      final channels = await _service.fetchActiveChannels();
+      final channels = await _fetchActiveChannels();
       emit(state.copyWith(isLoading: false, channels: channels));
     } catch (e) {
       emit(state.copyWith(

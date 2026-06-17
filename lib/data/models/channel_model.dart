@@ -1,3 +1,5 @@
+import 'package:marcadores_mundial_app/domain/entities/channel.dart';
+
 class ChannelModel {
   final int id;
   final String name;
@@ -22,4 +24,19 @@ class ChannelModel {
       isActive: json['is_active'] as bool? ?? false,
     );
   }
+
+  Channel toEntity() => Channel(
+        id: id,
+        name: name,
+        channelUrl: channelUrl,
+        logoUrl: logoUrl,
+        isActive: isActive,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'channel_url': channelUrl,
+        'logo_url': logoUrl,
+        'is_active': isActive,
+      };
 }

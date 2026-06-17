@@ -48,6 +48,8 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return BlocBuilder<WorldCupCubit, WorldCupState>(
       builder: (context, state) {
         if (state.isLoading && state.teams.isEmpty) {
@@ -58,20 +60,36 @@ class _HomePageState extends State<HomePage>
         }
         return Column(
           children: [
-            TabBar(
-              controller: _tabController,
-              labelColor: AppColors.secondary,
-              unselectedLabelColor: AppColors.textMuted,
-              indicatorColor: AppColors.secondary,
-              indicatorWeight: 3,
-              labelStyle:
-                  const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
-              tabs: [
-                Tab(text: context.tr('Matches', 'Partidos')),
-                Tab(text: context.tr('Teams', 'Equipos')),
-                Tab(text: context.tr('Groups', 'Grupos')),
-                Tab(text: context.tr('Stadiums', 'Estadios')),
-              ],
+            Container(
+              margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? AppColors.bgCard.withOpacity(0.5)
+                    : Colors.grey[100],
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: TabBar(
+                controller: _tabController,
+                labelColor: AppColors.textLight,
+                unselectedLabelColor: AppColors.textMuted,
+                indicator: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppColors.primary, AppColors.primaryDark],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                indicatorSize: TabBarIndicatorSize.tab,
+                labelStyle:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
+                unselectedLabelStyle:
+                    const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+                tabs: [
+                  Tab(text: context.tr('Matches', 'Partidos')),
+                  Tab(text: context.tr('Teams', 'Equipos')),
+                  Tab(text: context.tr('Groups', 'Grupos')),
+                  Tab(text: context.tr('Stadiums', 'Estadios')),
+                ],
+              ),
             ),
             Expanded(
               child: TabBarView(
@@ -130,7 +148,7 @@ class _HomePageState extends State<HomePage>
               style: const TextStyle(color: AppColors.textMuted, fontSize: 14),
             ),
             const SizedBox(height: 24),
-            ElevatedButton.icon(
+            FilledButton.icon(
               onPressed: () => context.read<WorldCupCubit>().loadAllData(),
               icon: const Icon(Icons.refresh_rounded),
               label: Text(context.tr('Try Again', 'Reintentar')),
@@ -141,8 +159,6 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  // ========== MATCHES TAB WITH FILTERS ==========
-
   Widget _buildMatchesTab(WorldCupState state) {
     final games = state.games;
     final cubit = context.read<WorldCupCubit>();
@@ -150,7 +166,6 @@ class _HomePageState extends State<HomePage>
 
     var filtered = List<Game>.from(games);
 
-    // Filter by status
     switch (_matchFilter) {
       case MatchFilter.finished:
         filtered = filtered.where((g) => g.finished).toList();
@@ -167,7 +182,6 @@ class _HomePageState extends State<HomePage>
         break;
     }
 
-    // Filter by search query (team name)
     if (_searchQuery.isNotEmpty) {
       final query = _searchQuery.toLowerCase();
       filtered = filtered.where((g) {
@@ -180,7 +194,6 @@ class _HomePageState extends State<HomePage>
 
     return Column(
       children: [
-        // Search bar
         Container(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
           child: TextField(
@@ -201,10 +214,10 @@ class _HomePageState extends State<HomePage>
                   : null,
               filled: true,
               fillColor: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.grey[900]
+                  ? AppColors.bgCard
                   : Colors.grey[100],
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(14),
                 borderSide: BorderSide.none,
               ),
               contentPadding:
@@ -212,7 +225,6 @@ class _HomePageState extends State<HomePage>
             ),
           ),
         ),
-        // Filter chips
         SizedBox(
           height: 44,
           child: ListView(
@@ -241,10 +253,8 @@ class _HomePageState extends State<HomePage>
             }).toList(),
           ),
         ),
-        const SizedBox(height: 4),
-        // Results count
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
           child: Row(
             children: [
               Text(
@@ -267,7 +277,6 @@ class _HomePageState extends State<HomePage>
             ],
           ),
         ),
-        // Matches list
         Expanded(
           child: filtered.isEmpty
               ? EmptyState(
@@ -305,10 +314,8 @@ class _HomePageState extends State<HomePage>
       List<Game> games, Map<String, Team> teamMap) {
     if (games.isEmpty) return [];
 
-    // Sort by date
     games.sort((a, b) => a.localDate.compareTo(b.localDate));
 
-    // Group by unique date (first 10 chars of localDate = MM/DD/YYYY)
     final grouped = <String, List<Game>>{};
     for (final g in games) {
       final dateKey =
@@ -327,8 +334,15 @@ class _HomePageState extends State<HomePage>
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 4),
         child: Row(
           children: [
-            const Icon(Icons.calendar_today_rounded,
-                size: 14, color: AppColors.secondary),
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: AppColors.secondary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: const Icon(Icons.calendar_today_rounded,
+                  size: 14, color: AppColors.secondary),
+            ),
             const SizedBox(width: 8),
             Flexible(
               child: Text(
@@ -372,8 +386,6 @@ class _HomePageState extends State<HomePage>
     return widgets;
   }
 
-  // ========== TEAMS TAB ==========
-
   Widget _buildTeamsTab(WorldCupState state) {
     final teams = state.teams;
 
@@ -408,8 +420,6 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  // ========== GROUPS TAB ==========
-
   Widget _buildGroupsTab(WorldCupState state) {
     final standings = state.groupStandings;
     final cubit = context.read<WorldCupCubit>();
@@ -436,8 +446,6 @@ class _HomePageState extends State<HomePage>
       ),
     );
   }
-
-  // ========== STADIUMS TAB ==========
 
   Widget _buildStadiumsTab(WorldCupState state) {
     final stadiums = state.stadiums;
@@ -477,13 +485,28 @@ class _HomePageState extends State<HomePage>
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 4),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w800,
-          color: isDark ? AppColors.textLight : AppColors.primary,
-        ),
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 20,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.secondary, AppColors.secondaryLight],
+              ),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: isDark ? AppColors.textLight : AppColors.primary,
+            ),
+          ),
+        ],
       ),
     );
   }
