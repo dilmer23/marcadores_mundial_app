@@ -40,14 +40,34 @@ class MatchCard extends StatelessWidget {
       statusText = context.tr('UPCOMING', 'PRÓXIMO');
     }
 
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppColors.cardRadius),
+          gradient: isFinished
+              ? null
+              : isLive
+                  ? LinearGradient(
+                      colors: [
+                        AppColors.error.withOpacity(0.05),
+                        isDark ? AppColors.bgDarkSurface : Colors.white,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                  : null,
+          color: isDark ? AppColors.bgCard : Colors.white,
           border: isLive
-              ? Border.all(color: AppColors.error.withOpacity(0.3), width: 1)
+              ? Border.all(color: AppColors.error.withOpacity(0.3), width: 1.5)
               : null,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+              blurRadius: 12,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -56,40 +76,8 @@ class MatchCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? AppColors.primary.withOpacity(0.2)
-                          : AppColors.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      'Group ${game.group}',
-                      style: const TextStyle(
-                        color: AppColors.secondary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: statusColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      statusText,
-                      style: TextStyle(
-                        color: statusColor,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
+                  _GroupBadge(group: game.group),
+                  _StatusBadge(color: statusColor, text: statusText, isLive: isLive),
                 ],
               ),
               const SizedBox(height: 16),
@@ -103,7 +91,7 @@ class MatchCard extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Column(
                       children: [
                         if (game.homeTeamLabel != null)
@@ -145,10 +133,7 @@ class MatchCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              Container(
-                height: 1,
-                color: isDark ? Colors.grey[800] : Colors.grey[200],
-              ),
+              Divider(height: 1, color: isDark ? Colors.grey[800] : Colors.grey[200]),
               const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -176,16 +161,91 @@ class MatchCard extends StatelessWidget {
   }
 }
 
+class _GroupBadge extends StatelessWidget {
+  final String group;
+  const _GroupBadge({required this.group});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [AppColors.secondary.withOpacity(0.2), AppColors.secondary.withOpacity(0.05)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.emoji_events_rounded, size: 12, color: AppColors.secondary),
+          const SizedBox(width: 4),
+          Text(
+            'Group $group',
+            style: const TextStyle(
+              color: AppColors.secondary,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatusBadge extends StatelessWidget {
+  final Color color;
+  final String text;
+  final bool isLive;
+
+  const _StatusBadge({required this.color, required this.text, required this.isLive});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
+        border: isLive ? Border.all(color: color.withOpacity(0.5)) : null,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (isLive)
+            Container(
+              width: 6,
+              height: 6,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.error,
+              ),
+            ),
+          if (isLive) const SizedBox(width: 6),
+          Text(
+            text,
+            style: TextStyle(
+              color: color,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _TeamInfo extends StatelessWidget {
   final Team? team;
   final String name;
   final bool isHome;
 
-  const _TeamInfo({
-    this.team,
-    required this.name,
-    required this.isHome,
-  });
+  const _TeamInfo({this.team, required this.name, required this.isHome});
 
   @override
   Widget build(BuildContext context) {
