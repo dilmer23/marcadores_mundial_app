@@ -17,6 +17,7 @@ import 'package:marcadores_mundial_app/presentation/pages/watch_tv_page.dart';
 import 'package:marcadores_mundial_app/presentation/pages/favorite_team_page.dart';
 import 'package:marcadores_mundial_app/presentation/pages/banner_management_page.dart';
 import 'package:marcadores_mundial_app/presentation/pages/channel_management_page.dart';
+import 'package:marcadores_mundial_app/presentation/pages/notification_management_page.dart';
 import 'package:marcadores_mundial_app/presentation/pages/profile_page.dart';
 import 'package:marcadores_mundial_app/presentation/pages/auth_page.dart';
 import 'package:marcadores_mundial_app/presentation/cubits/auth_cubit.dart';
@@ -67,6 +68,7 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
     _NavItem(Icons.image_outlined, Icons.image_rounded, 'Banners', 'Banners', 10),
     _NavItem(Icons.live_tv_outlined, Icons.live_tv_rounded, 'Channels', 'Canales', 11),
     _NavItem(Icons.person_outlined, Icons.person_rounded, 'Profile', 'Perfil', 12),
+    _NavItem(Icons.notifications_outlined, Icons.notifications_rounded, 'Notifications', 'Notificaciones', 13),
   ];
 
   static const _allNav = [..._primaryNav, ..._drawerNav];
@@ -108,6 +110,7 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
       if (item.index == 12) return !isGuest && PermissionChecker.has(role, Permission.viewProfile);
       if (item.index == 10) return PermissionChecker.has(role, Permission.viewBanners);
       if (item.index == 11) return PermissionChecker.has(role, Permission.viewChannels);
+      if (item.index == 13) return PermissionChecker.has(role, Permission.sendNotifications);
       return false;
     }).toList();
 
@@ -316,13 +319,16 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
                   if (!isGuest && PermissionChecker.has(role, Permission.viewProfile))
                     _drawerItem(Icons.person_rounded, context.tr('Profile', 'Perfil'), 12),
                   if (PermissionChecker.has(role, Permission.viewBanners) ||
-                      PermissionChecker.has(role, Permission.viewChannels)) ...[
+                      PermissionChecker.has(role, Permission.viewChannels) ||
+                      PermissionChecker.has(role, Permission.sendNotifications)) ...[
                     const Divider(indent: 20, endIndent: 20),
                     _sectionHeader('ADMIN'),
                     if (PermissionChecker.has(role, Permission.viewChannels))
                       _drawerItem(Icons.live_tv_rounded, 'Channels', 11),
                     if (PermissionChecker.has(role, Permission.viewBanners))
                       _drawerItem(Icons.image_rounded, 'Banners', 10),
+                    if (PermissionChecker.has(role, Permission.sendNotifications))
+                      _drawerItem(Icons.notifications_rounded, 'Notifications', 13),
                   ],
                   ListTile(
                     leading: const Icon(Icons.palette_rounded),
@@ -443,6 +449,7 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
       const BannerManagementPage(),
       const ChannelManagementPage(),
       const ProfilePage(),
+      const NotificationManagementPage(),
     ];
 
     return AnimatedSwitcher(

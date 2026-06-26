@@ -44,6 +44,9 @@ import 'package:marcadores_mundial_app/domain/usecases/update_channel.dart';
 import 'package:marcadores_mundial_app/domain/usecases/delete_channel.dart';
 import 'package:marcadores_mundial_app/data/services/supabase_service.dart';
 import 'package:marcadores_mundial_app/data/services/fcm_service.dart';
+import 'package:marcadores_mundial_app/data/repositories/notification_repository_impl.dart';
+import 'package:marcadores_mundial_app/domain/usecases/send_notification.dart';
+import 'package:marcadores_mundial_app/presentation/cubits/notification_cubit.dart';
 import 'package:marcadores_mundial_app/presentation/pages/main_shell.dart';
 import 'package:marcadores_mundial_app/presentation/pages/email_verification_page.dart';
 import 'package:marcadores_mundial_app/presentation/pages/complete_profile_page.dart';
@@ -157,6 +160,12 @@ class _MyAppState extends State<MyApp> {
               UpdateChannel(channelRepository),
               DeleteChannel(channelRepository),
             );
+          },
+        ),
+        BlocProvider(
+          create: (_) {
+            final repo = NotificationRepositoryImpl(Supabase.instance.client);
+            return NotificationCubit(SendNotification(repo));
           },
         ),
         BlocProvider(

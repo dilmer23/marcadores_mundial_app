@@ -15,6 +15,7 @@ enum Permission {
   editChannel,
   deleteChannel,
   manageUsers,
+  sendNotifications,
 }
 
 class PermissionChecker {
@@ -46,6 +47,7 @@ class PermissionChecker {
       Permission.editChannel,
       Permission.deleteChannel,
       Permission.manageUsers,
+      Permission.sendNotifications,
     ],
     'moderator': [
       Permission.viewHome,
