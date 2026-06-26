@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "388416913201",
+    "project_id": "marcador-mundial-app",
+    "storage_bucket": "marcador-mundial-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388416913201:android:3591e4222b683fa32d7a10",
+        "android_client_info": {
+          "package_name": "com.example.marcadores_mundial_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLFNaGHe9GtNAYKb7xvsv2uctT76NZRoo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
