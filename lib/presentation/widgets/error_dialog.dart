@@ -38,7 +38,7 @@ class AppErrorDialog extends StatelessWidget {
                 color: AppColors.error.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.error_outline_rounded,
+              child: Icon(Icons.error_outline_rounded,
                   size: 40, color: AppColors.error),
             ),
             const SizedBox(height: 20),

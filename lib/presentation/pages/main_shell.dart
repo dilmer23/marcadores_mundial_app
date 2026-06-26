@@ -17,6 +17,10 @@ import 'package:marcadores_mundial_app/presentation/pages/watch_tv_page.dart';
 import 'package:marcadores_mundial_app/presentation/pages/favorite_team_page.dart';
 import 'package:marcadores_mundial_app/presentation/pages/banner_management_page.dart';
 import 'package:marcadores_mundial_app/presentation/pages/channel_management_page.dart';
+import 'package:marcadores_mundial_app/presentation/pages/profile_page.dart';
+import 'package:marcadores_mundial_app/presentation/pages/auth_page.dart';
+import 'package:marcadores_mundial_app/presentation/cubits/auth_cubit.dart';
+import 'package:marcadores_mundial_app/core/permissions/permissions.dart';
 
 class _NavItem {
   final IconData icon;
@@ -62,6 +66,7 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
     _NavItem(Icons.settings_outlined, Icons.settings_rounded, 'Settings', 'Ajustes', 9),
     _NavItem(Icons.image_outlined, Icons.image_rounded, 'Banners', 'Banners', 10),
     _NavItem(Icons.live_tv_outlined, Icons.live_tv_rounded, 'Channels', 'Canales', 11),
+    _NavItem(Icons.person_outlined, Icons.person_rounded, 'Profile', 'Perfil', 12),
   ];
 
   static const _allNav = [..._primaryNav, ..._drawerNav];
@@ -95,6 +100,20 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
   }
 
   Widget _buildWebLayout(bool isDark) {
+    final authState = context.watch<AuthCubit>().state;
+    final isGuest = authState.status == AuthStatus.guest;
+    final role = isGuest ? 'guest' : (authState.user?.role ?? 'guest');
+    final allowedItems = _allNav.where((item) {
+      if (item.index <= 9) return true;
+      if (item.index == 12) return !isGuest && PermissionChecker.has(role, Permission.viewProfile);
+      if (item.index == 10) return PermissionChecker.has(role, Permission.viewBanners);
+      if (item.index == 11) return PermissionChecker.has(role, Permission.viewChannels);
+      return false;
+    }).toList();
+
+    int railSelected = allowedItems.indexWhere((item) => item.index == _currentIndex);
+    if (railSelected < 0) railSelected = 0;
+
     return Scaffold(
       body: Row(
         children: [
@@ -105,8 +124,8 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
               duration: const Duration(milliseconds: 200),
               width: _railExtended ? 200 : 72,
               child: NavigationRail(
-                selectedIndex: _allNav.indexWhere((item) => item.index == _currentIndex),
-                onDestinationSelected: (i) => setState(() => _currentIndex = _allNav[i].index),
+                selectedIndex: railSelected,
+                onDestinationSelected: (i) => setState(() => _currentIndex = allowedItems[i].index),
                 extended: _railExtended,
                 minExtendedWidth: 200,
                 minWidth: 72,
@@ -144,7 +163,7 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
                     ],
                   ),
                 ),
-                destinations: _allNav.map((item) {
+                destinations: allowedItems.map((item) {
                   final selected = _currentIndex == item.index;
                   return NavigationRailDestination(
                     icon: Icon(item.icon),
@@ -242,6 +261,9 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
 
   Widget _buildDrawer(BuildContext context, bool isDark) {
     final themeCubit = context.watch<ThemeCubit>();
+    final authState = context.watch<AuthCubit>().state;
+    final isGuest = authState.status == AuthStatus.guest;
+    final role = isGuest ? 'guest' : (authState.user?.role ?? 'guest');
 
     return Drawer(
       width: 300,
@@ -280,10 +302,28 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
                   const Divider(indent: 20, endIndent: 20),
                   _sectionHeader(context.tr('SETTINGS', 'AJUSTES')),
                   _drawerItem(Icons.settings_rounded, context.tr('Settings', 'Ajustes'), 9),
-                  const Divider(indent: 20, endIndent: 20),
-                  _sectionHeader('ADMIN'),
-                  _drawerItem(Icons.live_tv_rounded, 'Channels', 11),
-                  _drawerItem(Icons.image_rounded, 'Banners', 10),
+                  if (isGuest)
+                    ListTile(
+                      leading: const Icon(Icons.login_rounded),
+                      title: Text(context.tr('Sign In', 'Iniciar Sesión')),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (_) => const AuthPage(),
+                        ));
+                      },
+                    ),
+                  if (!isGuest && PermissionChecker.has(role, Permission.viewProfile))
+                    _drawerItem(Icons.person_rounded, context.tr('Profile', 'Perfil'), 12),
+                  if (PermissionChecker.has(role, Permission.viewBanners) ||
+                      PermissionChecker.has(role, Permission.viewChannels)) ...[
+                    const Divider(indent: 20, endIndent: 20),
+                    _sectionHeader('ADMIN'),
+                    if (PermissionChecker.has(role, Permission.viewChannels))
+                      _drawerItem(Icons.live_tv_rounded, 'Channels', 11),
+                    if (PermissionChecker.has(role, Permission.viewBanners))
+                      _drawerItem(Icons.image_rounded, 'Banners', 10),
+                  ],
                   ListTile(
                     leading: const Icon(Icons.palette_rounded),
                     title: Text(context.tr('Dark Mode', 'Modo Oscuro')),
@@ -402,6 +442,7 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
       _buildSettings(),
       const BannerManagementPage(),
       const ChannelManagementPage(),
+      const ProfilePage(),
     ];
 
     return AnimatedSwitcher(
@@ -600,6 +641,7 @@ class _BannerDrawerHeaderState extends State<_BannerDrawerHeader> {
     'settings': 9,
     'banners': 10,
     'channels': 11,
+    'profile': 12,
   };
 
   final _pageController = PageController();
