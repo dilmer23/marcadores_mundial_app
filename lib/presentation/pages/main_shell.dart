@@ -18,6 +18,7 @@ import 'package:marcadores_mundial_app/presentation/pages/favorite_team_page.dar
 import 'package:marcadores_mundial_app/presentation/pages/banner_management_page.dart';
 import 'package:marcadores_mundial_app/presentation/pages/channel_management_page.dart';
 import 'package:marcadores_mundial_app/presentation/pages/notification_management_page.dart';
+import 'package:marcadores_mundial_app/presentation/pages/app_version_page.dart';
 import 'package:marcadores_mundial_app/presentation/pages/profile_page.dart';
 import 'package:marcadores_mundial_app/presentation/pages/auth_page.dart';
 import 'package:marcadores_mundial_app/presentation/cubits/auth_cubit.dart';
@@ -69,6 +70,7 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
     _NavItem(Icons.live_tv_outlined, Icons.live_tv_rounded, 'Channels', 'Canales', 11),
     _NavItem(Icons.person_outlined, Icons.person_rounded, 'Profile', 'Perfil', 12),
     _NavItem(Icons.notifications_outlined, Icons.notifications_rounded, 'Notifications', 'Notificaciones', 13),
+    _NavItem(Icons.update_rounded, Icons.update_rounded, 'App Version', 'Versión App', 14),
   ];
 
   static const _allNav = [..._primaryNav, ..._drawerNav];
@@ -111,6 +113,7 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
       if (item.index == 10) return PermissionChecker.has(role, Permission.viewBanners);
       if (item.index == 11) return PermissionChecker.has(role, Permission.viewChannels);
       if (item.index == 13) return PermissionChecker.has(role, Permission.sendNotifications);
+      if (item.index == 14) return PermissionChecker.has(role, Permission.manageAppVersion);
       return false;
     }).toList();
 
@@ -268,6 +271,36 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
     final isGuest = authState.status == AuthStatus.guest;
     final role = isGuest ? 'guest' : (authState.user?.role ?? 'guest');
 
+    Widget sectionCard(String title, List<Widget> items) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16, top: 10, bottom: 2),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  color: isDark ? AppColors.textMuted.withOpacity(0.6) : AppColors.textMuted,
+                  letterSpacing: 1.4,
+                ),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.bgCard.withOpacity(0.5) : Colors.grey[50],
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Column(children: items),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Drawer(
       width: 300,
       child: SafeArea(
@@ -284,59 +317,83 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
                 Navigator.of(context).pop();
               },
             ),
+            const SizedBox(height: 8),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  _sectionHeader(context.tr('WORLD CUP', 'MUNDIAL')),
-                  _drawerItem(Icons.sports_soccer_rounded, context.tr('Matches', 'Partidos'), 0),
-                  _drawerItem(Icons.table_chart_rounded, context.tr('Standings', 'Clasificaci\u00f3n'), 1),
-                  _drawerItem(Icons.people_rounded, context.tr('Teams', 'Equipos'), 2),
-                  _drawerItem(Icons.stadium_rounded, context.tr('Stadiums', 'Estadios'), 4),
-                  const Divider(indent: 20, endIndent: 20),
-                  _sectionHeader(context.tr('GAMES', 'JUEGOS')),
-                  _drawerItem(Icons.sports_esports_rounded, context.tr('Predictions', 'Pron\u00f3sticos'), 5),
-                  _drawerItem(Icons.quiz_rounded, context.tr('Trivia', 'Trivia'), 6),
-                  const Divider(indent: 20, endIndent: 20),
-                  _sectionHeader(context.tr('MEDIA', 'MEDIA')),
-                  _drawerItem(Icons.live_tv_rounded, context.tr('Watch TV', 'Ver TV'), 3),
-                  _drawerItem(Icons.star_rounded, 'My Team', 7),
-                  _drawerItem(Icons.live_tv_rounded, 'IPTV', 8),
-                  const Divider(indent: 20, endIndent: 20),
-                  _sectionHeader(context.tr('SETTINGS', 'AJUSTES')),
-                  _drawerItem(Icons.settings_rounded, context.tr('Settings', 'Ajustes'), 9),
-                  if (isGuest)
-                    ListTile(
-                      leading: const Icon(Icons.login_rounded),
-                      title: Text(context.tr('Sign In', 'Iniciar Sesión')),
-                      onTap: () {
+                  sectionCard(context.tr('WORLD CUP', 'MUNDIAL'), [
+                    _drawerItem(Icons.sports_soccer_rounded, context.tr('Matches', 'Partidos'), 0),
+                    _drawerItem(Icons.table_chart_rounded, context.tr('Standings', 'Clasificaci\u00f3n'), 1),
+                    _drawerItem(Icons.people_rounded, context.tr('Teams', 'Equipos'), 2),
+                    _drawerItem(Icons.stadium_rounded, context.tr('Stadiums', 'Estadios'), 4),
+                  ]),
+                  sectionCard(context.tr('GAMES', 'JUEGOS'), [
+                    _drawerItem(Icons.sports_esports_rounded, context.tr('Predictions', 'Pron\u00f3sticos'), 5),
+                    _drawerItem(Icons.quiz_rounded, context.tr('Trivia', 'Trivia'), 6),
+                  ]),
+                  sectionCard(context.tr('MEDIA', 'MEDIA'), [
+                    _drawerItem(Icons.live_tv_rounded, context.tr('Watch TV', 'Ver TV'), 3),
+                    _drawerItem(Icons.star_rounded, 'My Team', 7),
+                    _drawerItem(Icons.live_tv_rounded, 'IPTV', 8),
+                  ]),
+                  sectionCard(context.tr('SETTINGS', 'AJUSTES'), [
+                    _drawerItem(Icons.settings_rounded, context.tr('Settings', 'Ajustes'), 9),
+                    if (isGuest)
+                      _drawerItem(Icons.login_rounded, context.tr('Sign In', 'Iniciar Sesi\u00f3n'), -1,
+                          onTap: () {
                         Navigator.of(context).pop();
                         Navigator.push(context, MaterialPageRoute(
                           builder: (_) => const AuthPage(),
                         ));
-                      },
-                    ),
-                  if (!isGuest && PermissionChecker.has(role, Permission.viewProfile))
-                    _drawerItem(Icons.person_rounded, context.tr('Profile', 'Perfil'), 12),
+                      }),
+                    if (!isGuest && PermissionChecker.has(role, Permission.viewProfile))
+                      _drawerItem(Icons.person_rounded, context.tr('Profile', 'Perfil'), 12),
+                    if (!isGuest)
+                      _drawerItem(Icons.logout_rounded, context.tr('Sign Out', 'Cerrar Sesión'), -1,
+                          onTap: () {
+                        context.read<AuthCubit>().signOut();
+                        Navigator.of(context).pop();
+                      }),
+                  ]),
                   if (PermissionChecker.has(role, Permission.viewBanners) ||
                       PermissionChecker.has(role, Permission.viewChannels) ||
-                      PermissionChecker.has(role, Permission.sendNotifications)) ...[
-                    const Divider(indent: 20, endIndent: 20),
-                    _sectionHeader('ADMIN'),
-                    if (PermissionChecker.has(role, Permission.viewChannels))
-                      _drawerItem(Icons.live_tv_rounded, 'Channels', 11),
-                    if (PermissionChecker.has(role, Permission.viewBanners))
-                      _drawerItem(Icons.image_rounded, 'Banners', 10),
-                    if (PermissionChecker.has(role, Permission.sendNotifications))
-                      _drawerItem(Icons.notifications_rounded, 'Notifications', 13),
-                  ],
-                  ListTile(
-                    leading: const Icon(Icons.palette_rounded),
-                    title: Text(context.tr('Dark Mode', 'Modo Oscuro')),
-                    trailing: Switch.adaptive(
-                      value: themeCubit.state.themeMode == ThemeMode.dark,
-                      activeColor: AppColors.primary,
-                      onChanged: (_) => themeCubit.toggleTheme(),
+                      PermissionChecker.has(role, Permission.sendNotifications) ||
+                      PermissionChecker.has(role, Permission.manageAppVersion))
+                    sectionCard('ADMIN', [
+                      if (PermissionChecker.has(role, Permission.viewChannels))
+                        _drawerItem(Icons.live_tv_rounded, 'Channels', 11),
+                      if (PermissionChecker.has(role, Permission.viewBanners))
+                        _drawerItem(Icons.image_rounded, 'Banners', 10),
+                      if (PermissionChecker.has(role, Permission.sendNotifications))
+                        _drawerItem(Icons.notifications_rounded, 'Notifications', 13),
+                      if (PermissionChecker.has(role, Permission.manageAppVersion))
+                        _drawerItem(Icons.update_rounded, 'App Version', 14),
+                    ]),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: isDark ? AppColors.primary.withOpacity(0.15) : AppColors.primary.withOpacity(0.08),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Icon(Icons.palette_rounded, size: 20, color: AppColors.primary),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(context.tr('Dark Mode', 'Modo Oscuro'),
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                        ),
+                        Switch.adaptive(
+                          value: themeCubit.state.themeMode == ThemeMode.dark,
+                          activeColor: AppColors.primary,
+                          onChanged: (_) => themeCubit.toggleTheme(),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -344,6 +401,51 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
             ),
             _buildDrawerFooter(isDark),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _drawerItem(IconData icon, String title, int index, {VoidCallback? onTap}) {
+    final isSelected = _currentIndex == index;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      child: Material(
+        color: isSelected ? AppColors.primary.withOpacity(0.12) : Colors.transparent,
+        borderRadius: BorderRadius.circular(10),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: onTap ??
+              () {
+                setState(() => _currentIndex = index);
+                Navigator.of(context).pop();
+              },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Row(
+              children: [
+                Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: isSelected ? AppColors.primary : (isDark ? Colors.white.withOpacity(0.06) : Colors.grey[100]),
+                    borderRadius: BorderRadius.circular(9),
+                  ),
+                  child: Icon(icon, size: 18, color: isSelected ? Colors.white : AppColors.primary),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                    color: isSelected ? AppColors.primary : null,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -364,55 +466,26 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
     );
   }
 
-  Widget _drawerItem(IconData icon, String title, int index) {
-    final isSelected = _currentIndex == index;
-    return ListTile(
-      leading: Icon(icon, color: isSelected ? AppColors.primary : null),
-      title: Text(
-        title,
-        style: TextStyle(
-          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-          color: isSelected ? AppColors.primary : null,
-        ),
-      ),
-      selected: isSelected,
-      selectedTileColor: AppColors.primary.withOpacity(0.08),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-      onTap: () {
-        setState(() => _currentIndex = index);
-        Navigator.of(context).pop();
-      },
-    );
-  }
-
   Widget _buildDrawerFooter(bool isDark) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(color: isDark ? Colors.grey[800]! : Colors.grey[200]!),
         ),
       ),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          _footerLink(context.tr('API', 'API'), 'https://worldcup26.ir'),
+          Container(width: 1, height: 12, margin: const EdgeInsets.symmetric(horizontal: 10),
+              color: isDark ? Colors.grey[700] : Colors.grey[300]),
+          _footerLink(context.tr('GitHub', 'GitHub'), 'https://github.com/dilmer23'),
+          Container(width: 1, height: 12, margin: const EdgeInsets.symmetric(horizontal: 10),
+              color: isDark ? Colors.grey[700] : Colors.grey[300]),
           Text(
-            context.tr('API by worldcup26.ir', 'API por worldcup26.ir'),
-            style: TextStyle(fontSize: 12, color: isDark ? AppColors.textMuted : Colors.grey[600]),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            context.tr('Developer: Dilmer Ramirez', 'Desarrollador: Dilmer Ramirez'),
-            style: TextStyle(fontSize: 12, color: isDark ? AppColors.textMuted : Colors.grey[600]),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _footerLink(context.tr('API', 'API'), 'https://worldcup26.ir'),
-              const Text(' \u2022 ', style: TextStyle(color: AppColors.textMuted)),
-              _footerLink(context.tr('GitHub', 'GitHub'), 'https://github.com/dilmer23'),
-            ],
+            context.tr('Developer', 'Desarrollador'),
+            style: TextStyle(fontSize: 11, color: isDark ? AppColors.textMuted : Colors.grey[600]),
           ),
         ],
       ),
@@ -450,6 +523,7 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
       const ChannelManagementPage(),
       const ProfilePage(),
       const NotificationManagementPage(),
+      const AppVersionManagementPage(),
     ];
 
     return AnimatedSwitcher(
@@ -549,14 +623,14 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 4),
                 child: Text(
-                  context.tr('World Cup 2026', 'Copa Mundial 2026'),
+                  context.tr('MARCADORES APP', 'MARCADORES APP'),
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
                 child: Text(
-                  context.tr('Predictions, scores, standings, teams & more', 'Pron\u00f3sticos, resultados, clasificaci\u00f3n, equipos y m\u00e1s'),
+                  context.tr('Live scores, standings, teams & more', 'Resultados, clasificaci\u00f3n, equipos y m\u00e1s'),
                   style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
                 ),
               ),
@@ -591,7 +665,7 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
         const SizedBox(height: 4),
         Center(
           child: Text(
-            '\u00a9 2026 World Cup 2026 App',
+            '\u00a9 2026 MARCADORES APP',
             style: TextStyle(color: isDark ? AppColors.textMuted.withOpacity(0.7) : Colors.grey[500], fontSize: 12),
           ),
         ),
@@ -731,116 +805,127 @@ class _BannerDrawerHeaderState extends State<_BannerDrawerHeader> {
           return _buildGradientHeader(null);
         }
 
-        return SizedBox(
-          width: double.infinity,
-          height: 200,
-          child: Stack(
-            children: [
-              PageView.builder(
-                controller: _pageController,
-                onPageChanged: (i) => _currentPage = i,
-                itemCount: banners.length,
-                itemBuilder: (context, index) {
-                  final banner = banners[index];
-                  return GestureDetector(
-                    onTap: () => _handleTap(banner.linkUrl),
-                    child: CachedNetworkImage(
-                      imageUrl: banner.imageUrl,
-                      fit: BoxFit.cover,
-                      placeholder: (_, __) => _buildGradientHeader(banner.title),
-                      errorWidget: (_, __, ___) => _buildGradientHeader(banner.title),
-                    ),
-                  );
-                },
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.black.withOpacity(0.4),
-                      Colors.transparent,
-                      Colors.black.withOpacity(0.6),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 20,
-                right: 20,
-                bottom: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      context.tr('World Cup 2026', 'Copa Mundial 2026'),
-                      style: const TextStyle(
-                        color: AppColors.textLight,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
+        return ClipRRect(
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(24),
+            bottomRight: Radius.circular(24),
+          ),
+          child: SizedBox(
+            width: double.infinity,
+            height: 220,
+            child: Stack(
+              children: [
+                PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: (i) => setState(() => _currentPage = i),
+                  itemCount: banners.length,
+                  itemBuilder: (context, index) {
+                    final banner = banners[index];
+                    return GestureDetector(
+                      onTap: () => _handleTap(banner.linkUrl),
+                      child: CachedNetworkImage(
+                        imageUrl: banner.imageUrl,
+                        fit: BoxFit.cover,
+                        placeholder: (_, __) => _buildGradientHeader(banner.title),
+                        errorWidget: (_, __, ___) => _buildGradientHeader(banner.title),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      context.tr('USA \u2022 Canada \u2022 Mexico',
-                          'EE. UU. \u2022 Canad\u00e1 \u2022 M\u00e9xico'),
-                      style: TextStyle(
-                        color: AppColors.textLight.withOpacity(0.7),
-                        fontSize: 13,
-                      ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
-              ),
-              if (banners.length > 1)
-                Positioned(
-                  right: 16,
-                  top: 16,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      '${_currentPage + 1}/${banners.length}',
-                      style: const TextStyle(
-                        color: AppColors.textLight,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
-              Positioned(
-                left: 20,
-                top: 24,
-                child: Container(
-                  width: 48,
-                  height: 48,
+                Container(
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [AppColors.secondary, AppColors.secondaryLight],
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.black.withOpacity(0.5),
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.7),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
                     ),
-                    borderRadius: BorderRadius.circular(14),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
+                  ),
+                ),
+                Positioned(
+                  left: 20,
+                  right: 20,
+                  bottom: 28,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'MARCADORES APP',
+                        style: TextStyle(
+                          color: AppColors.textLight,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'USA \u2022 Canada \u2022 Mexico',
+                        style: TextStyle(
+                          color: AppColors.textLight.withOpacity(0.7),
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.sports_soccer_rounded,
-                    size: 28,
-                    color: AppColors.primary,
+                ),
+                if (banners.length > 1)
+                  Positioned(
+                    bottom: 8,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(banners.length, (i) {
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            margin: const EdgeInsets.symmetric(horizontal: 3),
+                            width: _currentPage == i ? 20 : 7,
+                            height: 7,
+                            decoration: BoxDecoration(
+                              color: _currentPage == i
+                                  ? AppColors.secondary
+                                  : Colors.white.withOpacity(0.45),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ),
+                Positioned(
+                  left: 20,
+                  top: 24,
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [AppColors.secondary, AppColors.secondaryLight],
+                      ),
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.sports_soccer_rounded,
+                      size: 28,
+                      color: AppColors.primary,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -850,13 +935,17 @@ class _BannerDrawerHeaderState extends State<_BannerDrawerHeader> {
   Widget _buildGradientHeader(String? title) {
     return Container(
       width: double.infinity,
-      height: 200,
+      height: 220,
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [AppColors.primary, AppColors.primaryDark],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(24),
+          bottomRight: Radius.circular(24),
         ),
       ),
       child: Column(
@@ -886,7 +975,7 @@ class _BannerDrawerHeaderState extends State<_BannerDrawerHeader> {
           ),
           const Spacer(),
           Text(
-            context.tr('World Cup 2026', 'Copa Mundial 2026'),
+            'MARCADORES APP',
             style: const TextStyle(
               color: AppColors.textLight,
               fontSize: 22,

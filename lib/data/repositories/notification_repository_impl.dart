@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:marcadores_mundial_app/core/errors/exceptions.dart';
 import 'package:marcadores_mundial_app/data/models/notification_payload_model.dart';
@@ -15,7 +16,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
     try {
       final body = NotificationPayloadModel.toJson(payload);
       final res = await _client.functions.invoke('send-notification', body: body);
-      final data = res.data as Map<String, dynamic>?;
+      final data = res.data is String ? jsonDecode(res.data as String) as Map<String, dynamic>? : res.data as Map<String, dynamic>?;
       if (data == null) throw const ServerException('Respuesta vacía');
 
       return NotificationResult(

@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
         android:usesCleartextTraffic="true"
-        android:label="marcadores_mundial_app"
+        android:label="MARCADORES APP"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

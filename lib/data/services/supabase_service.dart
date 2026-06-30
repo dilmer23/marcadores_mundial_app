@@ -209,4 +209,15 @@ class SupabaseService {
   Future<void> deleteBanner(int id) async {
     await _client.from('banners').delete().eq('id', id);
   }
+
+  // ── App Version ──
+
+  Future<Map<String, dynamic>?> getAppVersion() async {
+    final res = await _client.from('app_version').select().maybeSingle();
+    return res as Map<String, dynamic>?;
+  }
+
+  Future<void> updateAppVersion(Map<String, dynamic> data) async {
+    await _client.from('app_version').update(data).eq('id', 1);
+  }
 }

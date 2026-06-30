@@ -16,6 +16,7 @@ enum Permission {
   deleteChannel,
   manageUsers,
   sendNotifications,
+  manageAppVersion,
 }
 
 class PermissionChecker {
@@ -48,6 +49,7 @@ class PermissionChecker {
       Permission.deleteChannel,
       Permission.manageUsers,
       Permission.sendNotifications,
+      Permission.manageAppVersion,
     ],
     'moderator': [
       Permission.viewHome,

@@ -66,7 +66,7 @@ class FcmService {
       n.title,
       n.body,
       const NotificationDetails(
-        android: AndroidNotificationDetails('worldcup', 'World Cup 2026',
+        android: AndroidNotificationDetails('worldcup', 'MARCADORES APP',
           importance: Importance.high, priority: Priority.high,
         ),
         iOS: DarwinNotificationDetails(),
