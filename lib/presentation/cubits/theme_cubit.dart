@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 
 class ThemeState extends Equatable {
   final ThemeMode themeMode;
-  const ThemeState({this.themeMode = ThemeMode.system});
+  const ThemeState({this.themeMode = ThemeMode.dark});
 
   ThemeState copyWith({ThemeMode? themeMode}) =>
       ThemeState(themeMode: themeMode ?? this.themeMode);

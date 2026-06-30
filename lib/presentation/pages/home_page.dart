@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:marcadores_mundial_app/core/theme/app_theme.dart';
 import 'package:marcadores_mundial_app/core/i18n/translations.dart';
 import 'package:marcadores_mundial_app/presentation/cubits/worldcup_cubit.dart';
+import 'package:marcadores_mundial_app/presentation/cubits/banner_cubit.dart';
 import 'package:marcadores_mundial_app/presentation/widgets/match_card.dart';
 import 'package:marcadores_mundial_app/presentation/widgets/team_card_widget.dart';
 import 'package:marcadores_mundial_app/presentation/widgets/group_standing_widget.dart';
@@ -28,6 +32,9 @@ class _HomePageState extends State<HomePage>
   final _searchController = TextEditingController();
   MatchFilter _matchFilter = MatchFilter.all;
   String _searchQuery = '';
+  final _bannerPageController = PageController();
+  Timer? _bannerTimer;
+  int _bannerPage = 0;
 
   @override
   void initState() {
@@ -36,14 +43,33 @@ class _HomePageState extends State<HomePage>
         TabController(length: 4, vsync: this, initialIndex: widget.initialTab);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<WorldCupCubit>().loadAllData();
+      context.read<BannerCubit>().loadBanners();
     });
+    _startBannerAutoScroll();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     _searchController.dispose();
+    _bannerTimer?.cancel();
+    _bannerPageController.dispose();
     super.dispose();
+  }
+
+  void _startBannerAutoScroll() {
+    _bannerTimer?.cancel();
+    _bannerTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+      if (!mounted) return;
+      final banners = context.read<BannerCubit>().state.banners;
+      if (banners.length < 2) return;
+      final next = (_bannerPage + 1) % banners.length;
+      _bannerPageController.animateToPage(
+        next,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      );
+    });
   }
 
   @override
@@ -91,6 +117,7 @@ class _HomePageState extends State<HomePage>
                 ],
               ),
             ),
+            _buildBannerStrip(),
             Expanded(
               child: TabBarView(
                 controller: _tabController,
@@ -479,6 +506,100 @@ class _HomePageState extends State<HomePage>
         }).toList(),
       ),
     );
+  }
+
+  Widget _buildBannerStrip() {
+    return BlocBuilder<BannerCubit, BannerState>(
+      builder: (context, state) {
+        final banners = state.banners.where((b) => b.isActive).toList();
+        if (banners.isEmpty) return const SizedBox.shrink();
+
+        return Container(
+          height: 100,
+          margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Stack(
+              children: [
+                PageView.builder(
+                  controller: _bannerPageController,
+                  onPageChanged: (i) => setState(() => _bannerPage = i),
+                  itemCount: banners.length,
+                  itemBuilder: (_, index) {
+                    final b = banners[index];
+                    return GestureDetector(
+                      onTap: b.linkUrl != null ? () => _openLink(b.linkUrl!) : null,
+                      child: CachedNetworkImage(
+                        imageUrl: b.imageUrl,
+                        fit: BoxFit.cover,
+                        placeholder: (_, __) => _bannerPlaceholder(),
+                        errorWidget: (_, __, ___) => _bannerPlaceholder(),
+                      ),
+                    );
+                  },
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.black.withOpacity(0.3), Colors.black.withOpacity(0.6)],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                ),
+                if (banners.length > 1)
+                  Positioned(
+                    bottom: 6,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(banners.length, (i) {
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                            width: _bannerPage == i ? 18 : 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: _bannerPage == i
+                                  ? AppColors.secondary
+                                  : Colors.white.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _bannerPlaceholder() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [AppColors.primary, AppColors.primaryDark],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: const Center(
+        child: Icon(Icons.sports_soccer_rounded, size: 32, color: Colors.white24),
+      ),
+    );
+  }
+
+  Future<void> _openLink(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 
   Widget _sectionHeader(String title) {

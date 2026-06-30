@@ -10,9 +10,9 @@ class AppColors {
   static const Color accentLight = Color(0xFF2A5080);
 
   // Dark
-  static const Color bgDark = Color(0xFF0a0a0a);
-  static const Color bgDarkSurface = Color(0xFF111111);
-  static const Color bgCard = Color(0xFF141414);
+  static const Color bgDark = Color(0xFF000000);
+  static const Color bgDarkSurface = Color(0xFF050505);
+  static const Color bgCard = Color(0xFF0a0a0a);
   static const Color bgCardHover = Color(0xFF1a1a1a);
 
   // Light

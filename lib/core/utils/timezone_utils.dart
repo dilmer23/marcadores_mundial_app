@@ -3,11 +3,15 @@ import 'package:intl/intl.dart';
 import 'package:marcadores_mundial_app/core/i18n/translations.dart';
 
 class TimezoneUtils {
-  /// Converts "MM/dd/yyyy HH:mm" (worldcup26.ir format) to local time string
+  static DateTime _toColombia(String rawDate) {
+    final dt = DateFormat('MM/dd/yyyy HH:mm').parse(rawDate, true);
+    return dt.add(const Duration(hours: -5));
+  }
+
+  /// Converts "MM/dd/yyyy HH:mm" (worldcup26.ir UTC) to Colombia time
   static String toLocalTime(String rawDate) {
     try {
-      final dt = DateFormat('MM/dd/yyyy HH:mm').parse(rawDate, true);
-      final local = dt.toLocal();
+      final local = _toColombia(rawDate);
       final now = DateTime.now();
       final isToday = local.day == now.day &&
           local.month == now.month &&
@@ -29,8 +33,7 @@ class TimezoneUtils {
 
   static String getLocalizedDate(String localDate, BuildContext context) {
     try {
-      final dt = DateFormat('MM/dd/yyyy HH:mm').parse(localDate, true);
-      final local = dt.toLocal();
+      final local = _toColombia(localDate);
       final now = DateTime.now();
       final isToday = local.day == now.day &&
           local.month == now.month &&
@@ -52,8 +55,7 @@ class TimezoneUtils {
 
   static String toLocalDate(String rawDate) {
     try {
-      final dt = DateFormat('MM/dd/yyyy HH:mm').parse(rawDate, true);
-      final local = dt.toLocal();
+      final local = _toColombia(rawDate);
       return DateFormat('EEE, MMM d').format(local);
     } catch (_) {
       return rawDate;
